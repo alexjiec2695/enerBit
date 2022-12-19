@@ -10,6 +10,7 @@ import (
 	"github.com/google/wire"
 	"rest_app/app"
 	"rest_app/app/config"
+	"rest_app/database"
 	app2 "rest_app/di/app"
 	"rest_app/di/databaseservice"
 	"rest_app/di/repositories"
@@ -28,7 +29,11 @@ import (
 // NewApplication wire's injector to create a new `app.Application`
 func NewApplication(conf config.AppConfiguration) (*app.Application, error) {
 	engine := server.NewServer()
-	databaseServiceImpl := enerbit.NewDatabaseServiceImpl()
+	db, err := database.NewPostgresStoreConnection()
+	if err != nil {
+		return nil, err
+	}
+	databaseServiceImpl := enerbit.NewDatabaseServiceImpl(db)
 	repository := enerbit2.NewRepository(databaseServiceImpl)
 	useCase := enerbit3.NewUseCase(repository)
 	handler := handlers.NewHandler(useCase)
