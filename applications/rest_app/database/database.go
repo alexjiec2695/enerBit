@@ -32,6 +32,7 @@ func NewPostgresStoreConnection() (*gorm.DB, error) {
 		MaxIdleConns: 2,
 		MaxOpenConns: 10,
 	}
+
 	var prefix string
 
 	if configuration.Schema != "" {
@@ -76,3 +77,5 @@ func NewPostgresStoreConnection() (*gorm.DB, error) {
 
 	return db, nil
 }
+
+
