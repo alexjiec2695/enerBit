@@ -1,0 +1,20 @@
+application:
+  env: dev
+  name: rest-app-api
+
+server:
+  host: localhost
+  port: ":5010"
+
+redis:
+  host: "localhost:6379"
+  pass: "MDNcVb924a"
+  db: 1
+
+postgres:
+  host: "localhost"
+  user: "postgres"
+  pass: "postgres"
+  dbName: "postgres"
+  port: "5432"
+  schema: "public"

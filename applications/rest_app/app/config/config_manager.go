@@ -10,10 +10,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-const defaultConfigPath string = "config/"
+const defaultConfigPath string = "environment/"
 const configPathEnv string = "CONFIG_PATH"
 
-//InitAppConfiguration is the initial function to load app configuration
+// InitAppConfiguration is the initial function to load app configuration
 func InitAppConfiguration() AppConfiguration {
 	return loadAppProperties()
 }

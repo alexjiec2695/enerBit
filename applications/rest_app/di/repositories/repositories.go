@@ -12,9 +12,4 @@ var ProviderSet = wire.NewSet(
 		new(gateways.Gateway),
 		new(*enerbit.Repository),
 	),
-
-	wire.Bind(
-		new(gateways.Streams),
-		new(*enerbit.Repository),
-	),
 )

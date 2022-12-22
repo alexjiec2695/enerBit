@@ -5,7 +5,7 @@ import (
 	"rest_app/infrastructure/entrypoints/rest/routers"
 )
 
-// Application struct for router and config
+// Application struct for router and environment
 type Application struct {
 	Router *routers.Router
 	Config config.AppConfiguration

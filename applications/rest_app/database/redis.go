@@ -3,13 +3,14 @@ package database
 import (
 	"github.com/go-redis/redis"
 	"log"
+	"rest_app/app/config"
 )
 
-func NewConnectionRedis() *redis.Client {
+func NewConnectionRedis(config config.AppConfiguration) *redis.Client {
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "MDNcVb924a",
-		DB:       1,
+		Addr:     config.Redis.Host,
+		Password: config.Redis.Pass,
+		DB:       config.Redis.DB,
 	})
 	_, err := redisClient.Ping().Result()
 	if err != nil {

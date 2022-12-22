@@ -8,7 +8,7 @@ import (
 )
 
 func TestInitAppConfiguration(test *testing.T) {
-	os.Setenv("CONFIG_PATH", "../../config")
+	os.Setenv("CONFIG_PATH", "../../environment")
 	var configApp config.AppConfiguration = config.InitAppConfiguration()
 
 	assert.Equal(test, "dev", configApp.Application.Environment)

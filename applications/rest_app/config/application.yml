@@ -1,7 +1,0 @@
-application:
-  env: dev
-  name: rest-app-api
-
-server:
-  host: localhost
-  port: ":5010"

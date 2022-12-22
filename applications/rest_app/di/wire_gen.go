@@ -29,15 +29,15 @@ import (
 // NewApplication wire's injector to create a new `app.Application`
 func NewApplication(conf config.AppConfiguration) (*app.Application, error) {
 	engine := server.NewServer()
-	db, err := database.NewPostgresStoreConnection()
+	db, err := database.NewPostgresStoreConnection(conf)
 	if err != nil {
 		return nil, err
 	}
 	databaseServiceImpl := enerbit.NewDatabaseServiceImpl(db)
-	client := database.NewConnectionRedis()
+	client := database.NewConnectionRedis(conf)
 	redisServiceImpl := enerbit.NewRedisServiceImpl(client)
 	repository := enerbit2.NewRepository(databaseServiceImpl, redisServiceImpl)
-	useCase := enerbit3.NewUseCase(repository, repository)
+	useCase := enerbit3.NewUseCase(repository)
 	handler := handlers.NewHandler(useCase)
 	enerBitRouter := routers.NewEnerBitRouter(handler)
 	router := routers.NewRouter(engine, enerBitRouter)

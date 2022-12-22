@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"rest_app/app/config"
 	"rest_app/infrastructure/drivenadapters/databaseservice/entitydata"
 
 	"gorm.io/driver/postgres"
@@ -20,17 +21,14 @@ type ConfigurationDb struct {
 	MaxOpenConns int
 }
 
-func NewPostgresStoreConnection() (*gorm.DB, error) {
-
+func NewPostgresStoreConnection(config config.AppConfiguration) (*gorm.DB, error) {
 	configuration := ConfigurationDb{
-		Host:         "localhost",
-		User:         "postgres",
-		Password:     "postgres",
-		DbName:       "postgres",
-		Port:         "5432",
-		Schema:       "public",
-		MaxIdleConns: 2,
-		MaxOpenConns: 10,
+		Host:     config.Postgres.Host,
+		User:     config.Postgres.User,
+		Password: config.Postgres.Password,
+		DbName:   config.Postgres.DbName,
+		Port:     config.Postgres.Port,
+		Schema:   config.Postgres.Schema,
 	}
 
 	var prefix string
@@ -77,5 +75,3 @@ func NewPostgresStoreConnection() (*gorm.DB, error) {
 
 	return db, nil
 }
-
-
