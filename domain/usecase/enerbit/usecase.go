@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"rest_app/domain/model/entities/entities"
 	"rest_app/domain/model/entities/gateways"
+	"sync"
 )
 
 type UseCase struct {
@@ -34,6 +35,9 @@ func (c *UseCase) Create(data entities.EnerBitEntities) error {
 	if existMeterInProperty {
 		return errors.New("business error, meter active in this address")
 	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(2)
 
 	return c.gateway.Create(data)
 }

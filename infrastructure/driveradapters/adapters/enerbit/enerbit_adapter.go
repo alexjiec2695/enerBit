@@ -2,7 +2,7 @@ package enerbit
 
 import "rest_app/domain/model/entities/entities"
 
-type Adapter interface {
+type AdapterDB interface {
 	Create(entities.EnerBitEntities) error
 	Update(entities.EnerBitEntities) error
 	ExistSerialBrand(serial, brand string) (bool, error)
@@ -11,4 +11,8 @@ type Adapter interface {
 	ExistMeterInProperty(string) (bool, error)
 	GetDisabledMeters() (*[]entities.EnerBitEntities, error)
 	Filter(string, string) (*entities.EnerBitEntities, error)
+}
+
+type AdapterStreams interface {
+	PublishTicket(data entities.EnerBitEntities) error
 }

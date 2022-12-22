@@ -10,8 +10,14 @@ import (
 var ProviderSet = wire.NewSet(
 	database.NewPostgresStoreConnection,
 	enerbit.NewDatabaseServiceImpl,
+	database.NewConnectionRedis,
+	enerbit.NewRedisServiceImpl,
 	wire.Bind(
-		new(adapter.Adapter),
+		new(adapter.AdapterDB),
 		new(*enerbit.DatabaseServiceImpl),
+	),
+	wire.Bind(
+		new(adapter.AdapterStreams),
+		new(*enerbit.RedisServiceImpl),
 	),
 )

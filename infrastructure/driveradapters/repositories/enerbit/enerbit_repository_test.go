@@ -53,12 +53,23 @@ func (m *AdapterMock) Filter(serial, brand string) (*entities.EnerBitEntities, e
 	return args.Get(0).(*entities.EnerBitEntities), args.Error(1)
 }
 
+type StreamsMock struct {
+	mock.Mock
+}
+
+func (m *StreamsMock) PublishTicket(data entities.EnerBitEntities) error {
+	args := m.Called(data)
+	return args.Error(0)
+}
+
 func TestRepository_Create_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{}
 	am.On("Create", data).Return(nil)
+	streams.On("PublishTicket", data).Return(nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	err := r.Create(data)
 
@@ -67,10 +78,11 @@ func TestRepository_Create_Success(t *testing.T) {
 
 func TestRepository_Update_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{}
 	am.On("Update", data).Return(nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	err := r.Update(data)
 
@@ -79,13 +91,14 @@ func TestRepository_Update_Success(t *testing.T) {
 
 func TestRepository_ExistSerialBrand_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{
 		Brand:  "987654",
 		Serial: "123456",
 	}
 	am.On("ExistSerialBrand", data.Serial, data.Brand).Return(true, nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	exist, err := r.ExistSerialBrand(data.Serial, data.Brand)
 
@@ -95,6 +108,7 @@ func TestRepository_ExistSerialBrand_Success(t *testing.T) {
 
 func TestRepository_ExistMeterInProperty_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{
 		Brand:   "987654",
 		Serial:  "123456",
@@ -102,7 +116,7 @@ func TestRepository_ExistMeterInProperty_Success(t *testing.T) {
 	}
 	am.On("ExistMeterInProperty", data.Address).Return(true, nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	exist, err := r.ExistMeterInProperty(data.Address)
 
@@ -112,6 +126,7 @@ func TestRepository_ExistMeterInProperty_Success(t *testing.T) {
 
 func TestRepository_IsActive_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{
 		ID:      "12312361283",
 		Brand:   "987654",
@@ -120,7 +135,7 @@ func TestRepository_IsActive_Success(t *testing.T) {
 	}
 	am.On("IsActive", data.ID).Return(true, nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	exist, err := r.IsActive(data.ID)
 
@@ -130,12 +145,13 @@ func TestRepository_IsActive_Success(t *testing.T) {
 
 func TestRepository_Delete_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{
 		ID: "12312361283",
 	}
 	am.On("Delete", data.ID).Return(nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	err := r.Delete(data.ID)
 
@@ -144,6 +160,7 @@ func TestRepository_Delete_Success(t *testing.T) {
 
 func TestRepository_GetDisabledMeters_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := []entities.EnerBitEntities{
 		{
 			ID:               "1234",
@@ -159,7 +176,7 @@ func TestRepository_GetDisabledMeters_Success(t *testing.T) {
 	}
 	am.On("GetDisabledMeters").Return(&data, nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	response, err := r.GetDisabledMeters()
 
@@ -169,6 +186,7 @@ func TestRepository_GetDisabledMeters_Success(t *testing.T) {
 
 func TestRepository_Filter_Success(t *testing.T) {
 	am := AdapterMock{}
+	streams := StreamsMock{}
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -183,7 +201,7 @@ func TestRepository_Filter_Success(t *testing.T) {
 
 	am.On("Filter", data.Serial, data.Brand).Return(&data, nil)
 
-	r := enerbit.NewRepository(&am)
+	r := enerbit.NewRepository(&am, &streams)
 
 	response, err := r.Filter(data.Serial, data.Brand)
 

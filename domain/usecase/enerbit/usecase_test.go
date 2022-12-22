@@ -54,9 +54,19 @@ func (m *GatewayMock) Filter(serial, brand string) (*entities.EnerBitEntities, e
 	return args.Get(0).(*entities.EnerBitEntities), args.Error(1)
 }
 
+type StreamsMock struct {
+	mock.Mock
+}
+
+func (m *StreamsMock) PublishTicket(data entities.EnerBitEntities) error {
+	args := m.Called(data)
+	return args.Error(0)
+}
+
 func TestUseCase_Create_Successful(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -110,6 +120,7 @@ func TestUseCase_Create_Return_Error_ExistSerialBrand(t *testing.T) {
 func TestUseCase_Create_Return_Error_ExistMeterInProperty(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -137,6 +148,7 @@ func TestUseCase_Create_Return_Error_ExistMeterInProperty(t *testing.T) {
 func TestUseCase_Create_Successful_ExistSerialBrand_True(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -164,6 +176,7 @@ func TestUseCase_Create_Successful_ExistSerialBrand_True(t *testing.T) {
 func TestUseCase_Create_Successful_ExistMeterInProperty_True(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -191,6 +204,7 @@ func TestUseCase_Create_Successful_ExistMeterInProperty_True(t *testing.T) {
 func TestUseCase_Delete_Successful(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	ID := "1234"
 	gt.On("IsActive", ID).Return(false, nil)
 	gt.On("Delete", ID).Return(nil)
@@ -205,6 +219,7 @@ func TestUseCase_Delete_Successful(t *testing.T) {
 func TestUseCase_Delete_Failed_IsActive_Error(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	ID := "1234"
 	gt.On("IsActive", ID).Return(false, errors.New("error"))
 
@@ -219,6 +234,7 @@ func TestUseCase_Delete_Failed_IsActive_Error(t *testing.T) {
 func TestUseCase_Delete_Successful_Is_Active(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	ID := "1234"
 	gt.On("IsActive", ID).Return(true, nil)
 	gt.On("Delete", ID).Return(nil)
@@ -234,6 +250,7 @@ func TestUseCase_Delete_Successful_Is_Active(t *testing.T) {
 func TestUseCase_Delete_Error(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	ID := "1234"
 	gt.On("IsActive", ID).Return(false, nil)
 	gt.On("Delete", ID).Return(errors.New("error"))
@@ -249,6 +266,7 @@ func TestUseCase_Delete_Error(t *testing.T) {
 func TestUseCase_Update_Successful(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -273,6 +291,7 @@ func TestUseCase_Update_Successful(t *testing.T) {
 func TestUseCase_GetDisabledMeters_Successful(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := []entities.EnerBitEntities{
 		{
 			ID:               "1234",
@@ -300,6 +319,7 @@ func TestUseCase_GetDisabledMeters_Successful(t *testing.T) {
 func TestUseCase_Filter_Successful(t *testing.T) {
 	// Arrange
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",

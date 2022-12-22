@@ -62,8 +62,18 @@ func (m *GatewayMock) Filter(serial, brand string) (*entities.EnerBitEntities, e
 	return args.Get(0).(*entities.EnerBitEntities), args.Error(1)
 }
 
+type StreamsMock struct {
+	mock.Mock
+}
+
+func (m *StreamsMock) PublishTicket(data entities.EnerBitEntities) error {
+	args := m.Called(data)
+	return args.Error(0)
+}
+
 func TestHandler_Create_With_StatusOK(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -112,6 +122,7 @@ func TestHandler_Create_With_StatusOK(t *testing.T) {
 
 func TestHandler_Create_With_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -160,6 +171,7 @@ func TestHandler_Create_With_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Create_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -196,6 +208,7 @@ func TestHandler_Create_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Delete_With_StatusOK(t *testing.T) {
 	gt := new(GatewayMock)
+
 	ID := "1234"
 
 	gt.On("IsActive", ID).Return(false, nil)
@@ -218,6 +231,7 @@ func TestHandler_Delete_With_StatusOK(t *testing.T) {
 
 func TestHandler_Delete_With_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	ID := "1234"
 
 	gt.On("IsActive", ID).Return(true, nil)
@@ -240,6 +254,7 @@ func TestHandler_Delete_With_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Update_With_StatusOK(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -285,6 +300,7 @@ func TestHandler_Update_With_StatusOK(t *testing.T) {
 
 func TestHandler_Update_With_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -330,6 +346,7 @@ func TestHandler_Update_With_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Update_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -363,6 +380,7 @@ func TestHandler_Update_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 
 func TestHandler_GetDisabledMeters_With_StatusOK(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := []entities.EnerBitEntities{
 		{
 			ID:               "1234",
@@ -392,6 +410,7 @@ func TestHandler_GetDisabledMeters_With_StatusOK(t *testing.T) {
 
 func TestHandler_GetDisabledMeters_With_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := []entities.EnerBitEntities{
 		{
 			ID:               "1234",
@@ -421,6 +440,7 @@ func TestHandler_GetDisabledMeters_With_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Filter_With_StatusOK(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -467,6 +487,7 @@ func TestHandler_Filter_With_StatusOK(t *testing.T) {
 
 func TestHandler_Filter_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",
@@ -501,6 +522,7 @@ func TestHandler_Filter_With_ShouldBindJSON_StatusBadRequest(t *testing.T) {
 
 func TestHandler_Filter_With_StatusBadRequest(t *testing.T) {
 	gt := new(GatewayMock)
+
 	data := entities.EnerBitEntities{
 		ID:               "1234",
 		Brand:            "1234567",

@@ -6,15 +6,20 @@ import (
 )
 
 type Repository struct {
-	adapter enerbit.Adapter
+	adapter        enerbit.AdapterDB
+	adapterStreams enerbit.AdapterStreams
 }
 
-func NewRepository(adapter enerbit.Adapter) *Repository {
-	return &Repository{adapter}
+func NewRepository(adapter enerbit.AdapterDB, adapterStreams enerbit.AdapterStreams) *Repository {
+	return &Repository{adapter, adapterStreams}
 }
 
 func (r *Repository) Create(data entities.EnerBitEntities) error {
-	return r.adapter.Create(data)
+	err := r.adapter.Create(data)
+	if err != nil {
+		return err
+	}
+	return r.adapterStreams.PublishTicket(data)
 }
 
 func (r *Repository) Update(data entities.EnerBitEntities) error {
@@ -43,4 +48,8 @@ func (r *Repository) GetDisabledMeters() (*[]entities.EnerBitEntities, error) {
 
 func (r *Repository) Filter(serial, brand string) (*entities.EnerBitEntities, error) {
 	return r.adapter.Filter(serial, brand)
+}
+
+func (r *Repository) PublishTicket(data entities.EnerBitEntities) error {
+	return r.adapterStreams.PublishTicket(data)
 }

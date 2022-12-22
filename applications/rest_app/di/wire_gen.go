@@ -34,8 +34,10 @@ func NewApplication(conf config.AppConfiguration) (*app.Application, error) {
 		return nil, err
 	}
 	databaseServiceImpl := enerbit.NewDatabaseServiceImpl(db)
-	repository := enerbit2.NewRepository(databaseServiceImpl)
-	useCase := enerbit3.NewUseCase(repository)
+	client := database.NewConnectionRedis()
+	redisServiceImpl := enerbit.NewRedisServiceImpl(client)
+	repository := enerbit2.NewRepository(databaseServiceImpl, redisServiceImpl)
+	useCase := enerbit3.NewUseCase(repository, repository)
 	handler := handlers.NewHandler(useCase)
 	enerBitRouter := routers.NewEnerBitRouter(handler)
 	router := routers.NewRouter(engine, enerBitRouter)
