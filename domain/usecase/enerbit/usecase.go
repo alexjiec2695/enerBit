@@ -32,14 +32,13 @@ func (c *UseCase) Create(data entities.EnerBitEntities) error {
 	}
 
 	if existMeterInProperty {
-		return errors.New("business error, serial or brand exists")
+		return errors.New("business error, meter active in this address")
 	}
 
 	return c.gateway.Create(data)
 }
 
 func (c *UseCase) Update(data entities.EnerBitEntities) error {
-
 	return c.gateway.Update(data)
 }
 

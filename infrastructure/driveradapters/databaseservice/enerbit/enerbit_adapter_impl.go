@@ -101,10 +101,24 @@ func (e *DatabaseServiceImpl) Delete(id string) error {
 
 func (e *DatabaseServiceImpl) GetDisabledMeters() (*[]entities.EnerBitEntities, error) {
 	var result []entitydata.EnerBitData
-	if err := e.db.Where("is_active = ?", false).Take(&result).Error; err != nil {
-		if !strings.EqualFold(err.Error(), "record not found") {
-			return nil, err
+
+	rows, err := e.db.Model(&entitydata.EnerBitData{}).Where(map[string]interface{}{
+		"is_active": false,
+	}).Rows()
+
+	defer rows.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var item entitydata.EnerBitData
+		if err = e.db.ScanRows(rows, &item); err != nil {
+			continue
 		}
+
+		result = append(result, item)
 	}
 
 	return mappersEntityDataToEntity(result), nil

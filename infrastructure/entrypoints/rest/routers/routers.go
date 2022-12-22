@@ -11,6 +11,7 @@ type Router struct {
 }
 
 func NewRouter(r *gin.Engine, enerBitRouter *EnerBitRouter) *Router {
+
 	enerBitRouter.registry(r)
 	return &Router{r}
 }
