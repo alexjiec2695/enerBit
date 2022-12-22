@@ -2,6 +2,7 @@ module rest_app
 
 require (
 	github.com/gin-gonic/gin v1.6.3
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/google/wire v0.4.0
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/spf13/viper v1.7.1

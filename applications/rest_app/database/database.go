@@ -2,6 +2,8 @@ package database
 
 import (
 	"fmt"
+	"rest_app/infrastructure/drivenadapters/databaseservice/entitydata"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -20,7 +22,16 @@ type ConfigurationDb struct {
 
 func NewPostgresStoreConnection() (*gorm.DB, error) {
 
-	configuration := ConfigurationDb{}
+	configuration := ConfigurationDb{
+		Host:         "localhost",
+		User:         "postgres",
+		Password:     "postgres",
+		DbName:       "postgres",
+		Port:         "5432",
+		Schema:       "public",
+		MaxIdleConns: 2,
+		MaxOpenConns: 10,
+	}
 	var prefix string
 
 	if configuration.Schema != "" {
@@ -57,6 +68,10 @@ func NewPostgresStoreConnection() (*gorm.DB, error) {
 
 	if configuration.MaxOpenConns != 0 {
 		sqlDB.SetMaxOpenConns(configuration.MaxOpenConns)
+	}
+
+	if err := db.AutoMigrate(&entitydata.EnerBitData{}); err != nil {
+		return &gorm.DB{}, err
 	}
 
 	return db, nil

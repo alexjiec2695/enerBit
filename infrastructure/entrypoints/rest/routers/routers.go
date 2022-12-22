@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// BasePath This const allows define the root path for all rest APIs
 const BasePath = "api"
 
 type Router struct {
